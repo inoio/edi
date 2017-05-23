@@ -91,4 +91,9 @@ class AccountInvoiceImport(models.TransientModel):
             parsed_inv['amount_untaxed'] = invoice2data_res['amount_untaxed']
         if 'amount_tax' in invoice2data_res:
             parsed_inv['amount_tax'] = invoice2data_res['amount_tax']
+        if 'lines' in invoice2data_res:
+            lines = parsed_inv['lines'] = filter(lambda x:'price' in x, invoice2data_res['lines'])
+            for line in lines:
+                line.setdefault('qty', 1)
+                line.setdefault('price_unit', line['price'] / line['qty'])
         return parsed_inv
