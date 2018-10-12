@@ -11,8 +11,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 try:
-    from invoice2data.main import extract_data
-    from invoice2data.template import read_templates
+    from invoice2data.main import extract_data, read_templates
     from invoice2data.main import logger as loggeri2data
 except ImportError:
     logger.debug('Cannot import invoice2data')
@@ -71,7 +70,7 @@ class AccountInvoiceImport(models.TransientModel):
         parsed_inv = {
             'partner': {
                 'vat': invoice2data_res.get('vat'),
-                'name': invoice2data_res.get('partner_name'),
+                'name': invoice2data_res.get('partner_name', invoice2data_res.get('issuer')),
                 'email': invoice2data_res.get('partner_email'),
                 'website': invoice2data_res.get('partner_website'),
                 'siren': invoice2data_res.get('siren'),
